@@ -8,7 +8,7 @@ A description of this dataset is available at:
 
 http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
 
-The original dataset is intended to be used with a machine learning algorithm to determine the activity (WALKING, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) from various acceleerometer data points read from a Samsung Galaxy S II smartphone worn by the subject.
+The original dataset is intended to be used with a machine learning algorithm to determine the activity (WALKING, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) from various accelerometer data points read from a Samsung Galaxy S II smartphone worn by the subject.
 
 The resultant dataset is a dataset that contains the mean of all mean and standard deviation variables from the original dataset by subject and activity.  It contains 180 rows and 68 columns, data from 30 subjects over the 6 activities.
 
@@ -16,7 +16,7 @@ It is important to note that only variables that explicitly contain the "-mean()
 
 # Procedure
 
-To generate the resulant dataset, the R function run_analysis.R was used.  The general procedure that was followed was:
+To generate the resultant dataset, the R function run_analysis.R was used.  The general procedure that was followed was:
 
 1. Download the original dataset from the UCI machine learning repository
 2. Combine the test and train datasets into one dataset
@@ -47,23 +47,23 @@ If the variable is prefixed with a 't', then that variable is a time domain sign
 
 * The variable is one of the following:
 
-tBodyAcc-XYZ
-tGravityAcc-XYZ
-tBodyAccJerk-XYZ
-tBodyGyro-XYZ
-tBodyGyroJerk-XYZ
-tBodyAccMag
-tGravityAccMag
-tBodyAccJerkMag
-tBodyGyroMag
-tBodyGyroJerkMag
-fBodyAcc-XYZ
-fBodyAccJerk-XYZ
-fBodyGyro-XYZ
-fBodyAccMag
-fBodyAccJerkMag
-fBodyGyroMag
-fBodyGyroJerkMag
+* tBodyAcc-XYZ
+* tGravityAcc-XYZ
+* tBodyAccJerk-XYZ
+* tBodyGyro-XYZ
+* tBodyGyroJerk-XYZ
+* tBodyAccMag
+* tGravityAccMag
+* tBodyAccJerkMag
+* tBodyGyroMag
+* tBodyGyroJerkMag
+* fBodyAcc-XYZ
+* fBodyAccJerk-XYZ
+* fBodyGyro-XYZ
+* fBodyAccMag
+* fBodyAccJerkMag
+* fBodyGyroMag
+* fBodyGyroJerkMag
 
 each representing an accelerometer measurement.  Note that each of the -XYZ represent a vector measurement and that data has been broken out into their constituent parts in the original and resultant datasets (i.e. seperate X, Y, Z variables).
 

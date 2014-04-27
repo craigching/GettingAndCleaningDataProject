@@ -11,11 +11,11 @@ The project asked us to analyze a dataset that includes accelerometer data colle
 # run_analysis.R
 This script was developed for maximum readability to ease the work a peer must do to assess it.  Because of this it is a bit longer than a more succinct or modular program.  The script is broken up into three main parts:
 
-** Utility functions
+* Utility functions
 
 These are intended to ease the implementation and readability of the core functions mentioned next.
 
-** Core functions
+* Core functions
 
 These implement the main logic for the analysis.  They are modeled after the requirements of the project:
 
@@ -25,11 +25,11 @@ These implement the main logic for the analysis.  They are modeled after the req
 4. Appropriately labels the data set with descriptive activity names.
 5. Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-** The analysis
+* The analysis
 
 Run the Core functions to produce the tidy dataset.
 
-** The tidy dataset
+* The tidy dataset
 
 The tidy dataset is included in data.txt and has also been uploaded using the course project web page.  The tidy dataset includes 180 rows of 86 variables.  The variables themselves have been made more readable by simply replacing the '-mean()' and '-std()' with 'Mean' and 'StdDev' respectively.  Depending on the peer assessing the dataset it may or may not be considered tidy, but the requirements were not specific and I felt that the names were already pretty long and chose not to make them longer.  It is also important, when looking at the variable names, to realize that each value is itself a mean according to the requirements of the project.  That fact is not reflected in the variable names.
 

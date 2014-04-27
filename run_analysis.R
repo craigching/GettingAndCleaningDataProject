@@ -1,38 +1,66 @@
 library(reshape2)
 
-url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
-
-if (!file.exists("./dataset.zip")) {
-  download.file(url, destfile = "./dataset.zip", method = "curl")
-  unzip("./dataset.zip")
+makeDataSetFname <- function(directory, dataset, type) {
+  paste(".", directory, dataset, paste(type, "_", dataset, ".txt", sep = ""), sep = "/")
 }
 
-# Read the train data
-X_train <- read.table("UCI HAR Dataset/train/X_train.txt")
-subject_train <- read.table("UCI HAR Dataset/train/subject_train.txt")
-y_train <- read.table("UCI HAR Dataset/train/y_train.txt")
-train_df <- cbind(y_train, subject_train, X_train)
+loadDataSet <- function(directory, dataset) {
 
-# Read the test data
-X_test <- read.table("UCI HAR Dataset/test/X_test.txt")
-subject_test <- read.table("UCI HAR Dataset/test/subject_test.txt")
-y_test <- read.table("UCI HAR Dataset/test/y_test.txt")
-test_df <- cbind(y_test, subject_test, X_test)
+  # Download and unzip the data set if it hasn't yet been downloaded and unzipped
+  url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+  if (!file.exists("./dataset.zip")) {
+    download.file(url, destfile = "./dataset.zip", method = "curl")
+    unzip("./dataset.zip")
+  }
 
-# Combine the train and test data into one data set
-df <- rbind(train_df, test_df)
+  # Read the specfified data set.  The dataset is spread
+  # across three files, read them and combine into one
+  X <- read.table(makeDataSetFname(directory, dataset, "X"))
+  subject <- read.table(makeDataSetFname(directory, dataset, "subject"))
+  y <- read.table(makeDataSetFname(directory, dataset, "y"))
 
-# Read the activity labels
-activity_labels <- read.table("UCI HAR Dataset/activity_labels.txt", stringsAsFactors = FALSE)
+  # Return the dataset, a combination of the data
+  # from the X, subject, and y files
+  cbind(y, subject, X)
+}
 
-features <- read.table("UCI HAR Dataset/features.txt", stringsAsFactors = FALSE)
-features <- features[, 2]
-colnames(df) <- c("y", "subject", features)
-df$activity <- factor(df$y, levels = 1:6, labels = activity_labels$V2)
+loadFeatures <- function() {
+  read.table("UCI HAR Dataset/features.txt", stringsAsFactors = FALSE)[, 2]
+}
 
-df2 <- df[, grep("subject|activity|-mean\\(|-std\\(", colnames(df))]
-#df2 <- df[, grep("subject|activity|mean|std", colnames(df), ignore.case = TRUE)]
+loadActivityLabels <- function() {
+  read.table("UCI HAR Dataset/activity_labels.txt", stringsAsFactors = FALSE)
+}
 
+readTrainAndTestDataset <- function() {
+  train <- loadDataSet("UCI HAR Dataset", "train")
+  test <- loadDataSet("UCI HAR Dataset", "test")
+  rbind(train, test)
+}
+
+extractMeanAndStdMeasurements <- function(df) {
+
+  # First, we need to associate the features with
+  # the dataset (by assigning them to the column
+  # names)
+  features <- loadFeatures()
+  colnames(df) <- c("activity_numeric", "subject", features)
+
+  # Now grab only those columns that are explicitly either
+  # mean() or std() variables
+  df[, grep("subject|activity_numeric|-mean\\(|-std\\(", colnames(df))]
+
+  # Alternatively we could include meanFreq(), but we are choosing not to
+  # df[, grep("subject|activity|mean|std", colnames(df), ignore.case = TRUE)]
+}
+
+replaceActivities <- function(df) {
+  activity_labels <- loadActivityLabels()
+  df$activity <- factor(df$activity_numeric, levels = 1:6, labels = activity_labels$V2)
+  df
+}
+
+# Vectorize gsub, for use when making "nice" variable labels
 vgsub <- function(pattern, replacement, x, ...) {
   for (i in 1:length(pattern)) {
     x <- gsub(pattern[i], replacement[i], x, ...)
@@ -40,12 +68,22 @@ vgsub <- function(pattern, replacement, x, ...) {
   x
 }
 
-# Clean up the variable names
-colnames(df2) <- vgsub(c("-mean\\(\\)", "-std\\(\\)"), c("Mean", "StdDev"), colnames(df2))
+labelVariables <- function(df) {
+  colnames(df) <- vgsub(c("-mean\\(\\)", "-std\\(\\)"), c("Mean", "StdDev"), colnames(df))
+  df
+}
 
-df3 <- melt(df2, id.vars = c("subject", "activity"))
-df4 <- dcast(df3, subject + activity ~ variable, mean)
+createResultantData <- function(df) {
+  tmp <- melt(df, id.vars = c("subject", "activity"))
+  dcast(tmp, subject + activity ~ variable, mean)
+}
 
-write.table(df4, "data.txt", row.names = FALSE)
+df <- readTrainAndTestDataset()
+df <- extractMeanAndStdMeasurements(df)
+df <- replaceActivities(df)
+df <- labelVariables(df)
+df <- createResultantData(df)
+
+write.table(df, "data.txt", row.names = FALSE)
 
 #View(df4)

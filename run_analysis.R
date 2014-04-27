@@ -1,3 +1,12 @@
+library(reshape2)
+
+url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+
+if (!file.exists("./dataset.zip")) {
+  download.file(url, destfile = "./dataset.zip", method = "curl")
+  unzip("./dataset.zip")
+}
+
 # Read the train data
 X_train <- read.table("UCI HAR Dataset/train/X_train.txt")
 subject_train <- read.table("UCI HAR Dataset/train/subject_train.txt")
@@ -22,6 +31,21 @@ colnames(df) <- c("y", "subject", features)
 df$activity <- factor(df$y, levels = 1:6, labels = activity_labels$V2)
 
 df2 <- df[, grep("subject|activity|-mean\\(|-std\\(", colnames(df))]
+#df2 <- df[, grep("subject|activity|mean|std", colnames(df), ignore.case = TRUE)]
+
+vgsub <- function(pattern, replacement, x, ...) {
+  for (i in 1:length(pattern)) {
+    x <- gsub(pattern[i], replacement[i], x, ...)
+  }
+  x
+}
+
+# Clean up the variable names
+colnames(df2) <- vgsub(c("-mean\\(\\)", "-std\\(\\)"), c("Mean", "StdDev"), colnames(df2))
 
 df3 <- melt(df2, id.vars = c("subject", "activity"))
 df4 <- dcast(df3, subject + activity ~ variable, mean)
+
+write.table(df4, "data.txt", row.names = FALSE)
+
+#View(df4)

@@ -47,23 +47,23 @@ If the variable is prefixed with a 't', then that variable is a time domain sign
 
 * The variable is one of the following:
 
-* tBodyAcc-XYZ
-* tGravityAcc-XYZ
-* tBodyAccJerk-XYZ
-* tBodyGyro-XYZ
-* tBodyGyroJerk-XYZ
-* tBodyAccMag
-* tGravityAccMag
-* tBodyAccJerkMag
-* tBodyGyroMag
-* tBodyGyroJerkMag
-* fBodyAcc-XYZ
-* fBodyAccJerk-XYZ
-* fBodyGyro-XYZ
-* fBodyAccMag
-* fBodyAccJerkMag
-* fBodyGyroMag
-* fBodyGyroJerkMag
+** tBodyAcc-XYZ
+** tGravityAcc-XYZ
+** tBodyAccJerk-XYZ
+** tBodyGyro-XYZ
+** tBodyGyroJerk-XYZ
+** tBodyAccMag
+** tGravityAccMag
+** tBodyAccJerkMag
+** tBodyGyroMag
+** tBodyGyroJerkMag
+** fBodyAcc-XYZ
+** fBodyAccJerk-XYZ
+** fBodyGyro-XYZ
+** fBodyAccMag
+** fBodyAccJerkMag
+** fBodyGyroMag
+** fBodyGyroJerkMag
 
 each representing an accelerometer measurement.  Note that each of the -XYZ represent a vector measurement and that data has been broken out into their constituent parts in the original and resultant datasets (i.e. seperate X, Y, Z variables).
 
